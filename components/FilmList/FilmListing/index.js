@@ -1,11 +1,15 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { TouchableHighlight, Text } from "react-native";
 
-function FilmListing({ data }) {
+function FilmListing({ data, navigate }) {
+  const navigateToFilmTimer = () => {
+    navigate("FilmTimer", data);
+  };
+
   return (
-    <View>
+    <TouchableHighlight onPress={navigateToFilmTimer}>
       <Text>{data.title}</Text>
-    </View>
+    </TouchableHighlight>
   );
 }
 

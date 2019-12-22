@@ -2,7 +2,7 @@ import React from "react";
 import { View, FlatList, Text } from "react-native";
 import FilmListing from "./FilmListing/index.js";
 
-function FilmList() {
+function FilmList({ navigate }) {
   const mockFilmData = [
     { title: "Star Wars", id: "1" },
     { title: "Get Him to the Greek", id: "2" },
@@ -14,7 +14,9 @@ function FilmList() {
     <View>
       <FlatList
         data={mockFilmData}
-        renderItem={({ item }) => <FilmListing data={item} />}
+        renderItem={({ item }) => (
+          <FilmListing navigate={navigate} data={item} />
+        )}
         keyExtractor={item => item.id}
       />
     </View>
