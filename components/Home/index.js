@@ -1,12 +1,14 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React from "react";
+import { SafeAreaView, Text } from "react-native";
+import FilmList from "../FilmList/index.js";
 
 function Home() {
   return (
-    <View>
-      <Text>Hello World in folder </Text>
-    </View>
-  )
+    <SafeAreaView>
+      <Text>Home</Text>
+      <FilmList />
+    </SafeAreaView>
+  );
 }
 
-export default Home
+export default Home;
