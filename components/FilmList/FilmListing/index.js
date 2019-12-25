@@ -7,7 +7,18 @@ function FilmListing({ data, navigate }) {
   };
 
   return (
-    <TouchableHighlight onPress={navigateToFilmTimer}>
+    <TouchableHighlight
+      activeOpacity={0.1}
+      underlayColor={"gray"}
+      onPress={navigateToFilmTimer}
+      style={{
+        height: 50,
+        borderBottomWidth: 1,
+        borderColor: "black",
+        flex: 1,
+        justifyContent: "center"
+      }}
+    >
       <Text>{data.title}</Text>
     </TouchableHighlight>
   );

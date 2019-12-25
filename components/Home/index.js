@@ -7,9 +7,6 @@ function Home({ navigation }) {
     <SafeAreaView>
       <Text>Home</Text>
       <FilmList navigate={navigation.navigate} />
-      <Button title="test" onPress={() => navigation.navigate("FilmTimer")}>
-        Test
-      </Button>
     </SafeAreaView>
   );
 }
