@@ -1,5 +1,8 @@
 import React from "react";
 import { ProgressViewIOS, View, Button, Text, Vibration } from "react-native";
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
+import {default as mockLocalNotificationData}  from "../../lib/data/localNotification";
 
 class FilmTimer extends React.Component {
   constructor(props) {
@@ -7,70 +10,79 @@ class FilmTimer extends React.Component {
 
     this.state = {
       filmDuration: 0.0,
-      demoTargetText: "Target percentage not yet reached",
+      hasNotificationPermissions: false,
       didUnmount: false
     };
 
-    this.startTimer = this.startTimer.bind(this);
-    this.stopTimer = this.stopTimer.bind(this);
+    this.handleStartTimerPress = this.handleStartTimerPress.bind(this);
+  }
+
+  async componentDidMount() {
+    this.requestNotificationPermissions();
   }
 
   componentWillUnmount() {
     this.setState({ didUnmount: true });
-    this.stopTimer();
   }
 
-  componentDidUpdate() {
-    const { filmDuration, demoTargetText } = this.state;
-    const targetTime = 15;
-    if (
-      filmDuration >= targetTime / 100 &&
-      demoTargetText !== "Reached target percentage. Start vibration"
-    ) {
-      const PATTERN = [600, 600, 600];
-      Vibration.vibrate(PATTERN);
-      this.setState({
-        demoTargetText: "Reached target percentage. Start vibration"
-      });
+  async requestNotificationPermissions() {
+    let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (result.status === "granted") {
+      if(!this.state.hasNotificationPermissions) this.setState({hasNotificationPermissions: true})
     }
   }
 
-  startTimer() {
-    const { navigation } = this.props;
-    const { didUnmount } = this.state;
-    const totalSeconds = JSON.stringify(
-      navigation.getParam("totalSeconds", 0.0)
-    );
-    const incrementer = 1 / totalSeconds;
-    this.interval = setInterval(() => {
-      if (!didUnmount) {
-        this.setState({ filmDuration: this.state.filmDuration + incrementer });
-      }
-    }, 1000);
+  handleStartTimerPress() {
+    this.scheduleNotifications();
   }
 
-  stopTimer() {
-    if (this.interval) clearInterval(this.interval);
+  getNotificationTime(notificationTimeMS) { // TODO Move to helper function and test
+    return new Date().getTime() + (notificationTimeMS * 1000);
   }
+
+  scheduleNotifications() {
+    const { navigation } = this.props;
+    const notificationArray = navigation.getParam("notifications", [])
+    notificationArray.map(notification => {
+      this.scheduleNotification(notification.notificationTime)
+    })
+  }
+
+  async scheduleNotification(notificationTimeMS) {
+    const schedulingData = { 
+      time: this.getNotificationTime(notificationTimeMS)
+    }
+    try {
+      await Notifications.scheduleLocalNotificationAsync(
+        mockLocalNotificationData,
+        schedulingData
+      );
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  
 
   render() {
-    const { demoTargetText, filmDuration } = this.state;
+    const {
+      hasNotificationPermissions
+    } = this.state;
     const { navigation } = this.props;
     const title = JSON.stringify(navigation.getParam("title", ""));
-    const totalSeconds = JSON.stringify(
-      navigation.getParam("totalSeconds", 0.0)
-    );
-    const percentage = filmDuration * 100;
+
     return (
       <View>
         <Text>{title}</Text>
-        <Text>Total time: {totalSeconds} seconds</Text>
-        <Text>Target Vibration percentage: 15%</Text>
-        <Text>Percentage complete: {percentage}%</Text>
-        <Text>{demoTargetText}</Text>
-        <Button title="Start Timer" onPress={this.startTimer} />
-        <Button title="Stop Timer" onPress={this.stopTimer} />
-        <ProgressViewIOS progress={this.state.filmDuration} />
+        {!hasNotificationPermissions && (
+          <Text>No notification permssions accepted</Text>
+        )}
+        {hasNotificationPermissions && (
+          <>
+            <Button title="Start Timer" onPress={this.handleStartTimerPress} />
+            <ProgressViewIOS progress={this.state.filmDuration} />
+          </>
+        )}
       </View>
     );
   }
