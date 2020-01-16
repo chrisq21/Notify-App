@@ -1,10 +1,10 @@
-import React from "react";
-import { TouchableHighlight, Text } from "react-native";
+import React from "react"
+import { TouchableHighlight, Text } from "react-native"
 
 function FilmListing({ data, navigate }) {
   const navigateToFilmTimer = () => {
-    navigate("FilmTimer", data);
-  };
+    navigate("FilmTimer", data)
+  }
 
   return (
     <TouchableHighlight
@@ -16,12 +16,12 @@ function FilmListing({ data, navigate }) {
         borderBottomWidth: 1,
         borderColor: "black",
         flex: 1,
-        justifyContent: "center"
+        justifyContent: "center",
       }}
     >
       <Text>{data.title}</Text>
     </TouchableHighlight>
-  );
+  )
 }
 
-export default FilmListing;
+export default FilmListing

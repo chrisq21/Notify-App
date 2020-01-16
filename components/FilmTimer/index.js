@@ -1,47 +1,55 @@
-import React from "react";
-import { ProgressViewIOS, View, Button, Text, Vibration } from "react-native";
-import { Notifications } from "expo";
-import * as Permissions from "expo-permissions";
-import {default as mockLocalNotificationData}  from "../../lib/data/localNotification";
+import React from "react"
+import {
+  ProgressViewIOS,
+  View,
+  Button,
+  Text,
+  Vibration,
+} from "react-native"
+import { Notifications } from "expo"
+import * as Permissions from "expo-permissions"
+import { default as mockLocalNotificationData } from "../../lib/data/localNotification"
 
 class FilmTimer extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       filmDuration: 0.0,
       hasNotificationPermissions: false,
-      didUnmount: false
-    };
+      didUnmount: false,
+    }
 
-    this.handleStartTimerPress = this.handleStartTimerPress.bind(this);
+    this.handleStartTimerPress = this.handleStartTimerPress.bind(this)
   }
 
   async componentDidMount() {
-    this.requestNotificationPermissions();
+    this.requestNotificationPermissions()
   }
 
   componentWillUnmount() {
-    this.setState({ didUnmount: true });
+    this.setState({ didUnmount: true })
   }
 
   async requestNotificationPermissions() {
-    let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    let result = await Permissions.askAsync(Permissions.NOTIFICATIONS)
     if (result.status === "granted") {
-      if(!this.state.hasNotificationPermissions) this.setState({hasNotificationPermissions: true})
+      if (!this.state.hasNotificationPermissions)
+        this.setState({ hasNotificationPermissions: true })
     }
   }
 
   handleStartTimerPress() {
-    this.scheduleNotifications();
+    this.scheduleNotifications()
   }
 
-  getNotificationTime(notificationTimeMS) { // TODO Move to helper function and test
-    return new Date().getTime() + (notificationTimeMS * 1000);
+  getNotificationTime(notificationTimeMS) {
+    // TODO Move to helper function and test
+    return new Date().getTime() + notificationTimeMS * 1000
   }
 
   scheduleNotifications() {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     const notificationArray = navigation.getParam("notifications", [])
     notificationArray.map(notification => {
       this.scheduleNotification(notification.notificationTime)
@@ -49,27 +57,23 @@ class FilmTimer extends React.Component {
   }
 
   async scheduleNotification(notificationTimeMS) {
-    const schedulingData = { 
-      time: this.getNotificationTime(notificationTimeMS)
+    const schedulingData = {
+      time: this.getNotificationTime(notificationTimeMS),
     }
     try {
       await Notifications.scheduleLocalNotificationAsync(
         mockLocalNotificationData,
         schedulingData
-      );
-    } catch(error) {
+      )
+    } catch (error) {
       console.log(error)
     }
   }
 
-  
-
   render() {
-    const {
-      hasNotificationPermissions
-    } = this.state;
-    const { navigation } = this.props;
-    const title = JSON.stringify(navigation.getParam("title", ""));
+    const { hasNotificationPermissions } = this.state
+    const { navigation } = this.props
+    const title = JSON.stringify(navigation.getParam("title", ""))
 
     return (
       <View>
@@ -79,13 +83,16 @@ class FilmTimer extends React.Component {
         )}
         {hasNotificationPermissions && (
           <>
-            <Button title="Start Timer" onPress={this.handleStartTimerPress} />
+            <Button
+              title="Start Timer"
+              onPress={this.handleStartTimerPress}
+            />
             <ProgressViewIOS progress={this.state.filmDuration} />
           </>
         )}
       </View>
-    );
+    )
   }
 }
 
-export default FilmTimer;
+export default FilmTimer

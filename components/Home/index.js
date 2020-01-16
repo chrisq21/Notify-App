@@ -1,6 +1,6 @@
-import React from "react";
-import { SafeAreaView, Text, Button } from "react-native";
-import FilmList from "../FilmList/index.js";
+import React from "react"
+import { SafeAreaView, Text, Button } from "react-native"
+import FilmList from "../FilmList/index.js"
 
 function Home({ navigation }) {
   return (
@@ -8,7 +8,7 @@ function Home({ navigation }) {
       <Text>Home</Text>
       <FilmList navigate={navigation.navigate} />
     </SafeAreaView>
-  );
+  )
 }
 
-export default Home;
+export default Home

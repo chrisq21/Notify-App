@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint **/*.js --ignore-pattern node_modules/ --ignore-path yarn.lock"
+    "lint": "eslint **/*.js --ignore-pattern node_modules/ --ignore-path yarn.lock",
+    "lint:fix": "eslint **/*.js --ignore-pattern node_modules/ --ignore-path yarn.lock --fix"
   },
   "dependencies": {
     "babel-eslint": "^10.0.3",
