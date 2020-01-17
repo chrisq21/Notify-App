@@ -1,11 +1,6 @@
 import React from "react"
-import {
-  ProgressViewIOS,
-  View,
-  Button,
-  Text,
-  Vibration,
-} from "react-native"
+import PropTypes from "prop-types"
+import { ProgressViewIOS, View, Button, Text } from "react-native"
 import { Notifications } from "expo"
 import * as Permissions from "expo-permissions"
 import { default as mockLocalNotificationData } from "../../lib/data/localNotification"
@@ -93,6 +88,12 @@ class FilmTimer extends React.Component {
       </View>
     )
   }
+}
+
+FilmTimer.propTypes = {
+  navigation: PropTypes.shape({
+    getParam: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
 export default FilmTimer

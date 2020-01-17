@@ -1,5 +1,6 @@
 import React from "react"
-import { View, FlatList, Text } from "react-native"
+import PropTypes from "prop-types"
+import { View, FlatList } from "react-native"
 import FilmListing from "./FilmListing/index.js"
 
 function FilmList({ navigate }) {
@@ -49,6 +50,10 @@ function FilmList({ navigate }) {
       />
     </View>
   )
+}
+
+FilmList.propTypes = {
+  navigate: PropTypes.func.isRequired,
 }
 
 export default FilmList

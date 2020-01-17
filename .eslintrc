@@ -11,8 +11,5 @@
   ],
   "globals": {
     "module": true
-  },
-  "rules": {
-    "prettier": 2
   }
 }

@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from "prop-types"
 import { TouchableHighlight, Text } from "react-native"
 
 function FilmListing({ data, navigate }) {
@@ -22,6 +23,22 @@ function FilmListing({ data, navigate }) {
       <Text>{data.title}</Text>
     </TouchableHighlight>
   )
+}
+
+FilmListing.propTypes = {
+  navigate: PropTypes.func.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      totalFilmTime: PropTypes.number.isRequired,
+      notifications: PropTypes.arrayOf(
+        PropTypes.shape({
+          notification: PropTypes.number.isRequired,
+        }).isRequired
+      ).isRequired,
+    }).isRequired
+  ).isRequired,
 }
 
 export default FilmListing
